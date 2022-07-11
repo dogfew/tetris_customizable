@@ -22,9 +22,9 @@ gap: int = 1
 
 """Не стоит редактировать"""
 
-margin = size * 5
-screen_width = size * max(width, 5)
-screen_height = size * max(height, 5) + margin
+margin: int = size * 5
+screen_width: int = size * max(width, 5)
+screen_height: int = size * max(height, 5) + margin
 
 
 def generate_figure() -> set:
