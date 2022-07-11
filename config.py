@@ -20,6 +20,10 @@ size: int = 50
 borders: int = size // 10
 gap: int = 1
 
+font: str = "opensans"
+font_size: int = size * 4 // 5
+
+
 """Не стоит редактировать"""
 
 margin: int = size * 5

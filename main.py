@@ -4,7 +4,7 @@ import pygame
 
 from board import Board
 from cube import Figure, NextCubes
-from config import (background_color, second_color,
+from config import (background_color, second_color, font_size,
                     start_speed, max_speed, speed_step,
                     size, screen_width, screen_height, margin)
 
@@ -25,7 +25,7 @@ def main():
     def change_timer(score_value: int):
         pygame.time.set_timer(cubes_down_event, max(start_speed - score_value * speed_step, max_speed))
 
-    font = pygame.font.SysFont('opensans', size * 4 // 5, True)
+    font = pygame.font.SysFont('opensans', font_size, True)
     next_cubes_surf = pygame.rect.Rect((screen_width - size * 4.5 - 10, 0), (4.5 * size, 4.5 * size))
 
     score_text = "{}"
