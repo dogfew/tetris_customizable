@@ -1,26 +1,24 @@
 import sys
-import json
 
 import pygame
 
 from desk import Desk
 from cube import Figure, NextCubes
+from config import (background_color, second_color,
+                    start_speed, max_speed, speed_step,
+                    size, screen_width, screen_height, margin)
 
 
-def main(background_color: str, second_color: str, cube_colors: list,
-         start_speed: int, max_speed: int, speed_step: int,
-         screen_width: int, screen_height: int, margin: int, size: int):
+def main():
     pygame.init()
     clock = pygame.time.Clock()
-    margin = margin // size * size
-    screen_width, screen_height = size * screen_width, size * screen_height + margin
     game_screen = pygame.display.set_mode((screen_width, screen_height))
     stats_rect = pygame.rect.Rect((0, 0), (screen_width, margin))
     score = 0
 
-    desk = Desk(screen_width, screen_height, margin)
-    figure = Figure(NextCubes(desk, cube_colors, size))
-    cubes = NextCubes(desk, cube_colors, size)
+    desk = Desk()
+    figure = Figure(NextCubes(desk))
+    cubes = NextCubes(desk)
     cubes_down_event = pygame.USEREVENT + 1
     pygame.time.set_timer(cubes_down_event, start_speed)
 
@@ -28,7 +26,12 @@ def main(background_color: str, second_color: str, cube_colors: list,
         pygame.time.set_timer(cubes_down_event, max(start_speed - score_value * speed_step, max_speed))
 
     font = pygame.font.SysFont('opensans', size * 4 // 5, True)
-    next_cubes_surf = pygame.rect.Rect((150, 0), (margin, margin))
+    next_cubes_surf = pygame.rect.Rect((screen_width - size * 4.5 - 10, 0), (4.5 * size, 4.5 * size))
+
+    score_text = "{}"
+    score_surf = font.render(score_text, True, background_color)
+
+    score_rect = score_surf.get_rect(topleft=(5, margin // 2))
 
     while True:
         for event in pygame.event.get():
@@ -36,31 +39,25 @@ def main(background_color: str, second_color: str, cube_colors: list,
                 pygame.quit()
                 sys.exit()
             if event.type == cubes_down_event:
-                figure.update(desk, cubes, cube_colors)
+                figure.update(desk, cubes)
                 change_timer(score)
             if event.type == pygame.KEYDOWN:
                 match event.key:
-                    case pygame.K_a:
+                    case pygame.K_a | pygame.K_LEFT:
                         figure.move_left(desk)
-                    case pygame.K_d:
+                    case pygame.K_d | pygame.K_RIGHT:
                         figure.move_right(desk)
                     case pygame.K_s:
                         figure.move_down(desk)
-                    case pygame.K_q:
+                    case pygame.K_q | pygame.K_w | pygame.K_UP:
                         figure.rot_left(desk)
                     case pygame.K_e:
                         figure.rot_right(desk)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE] or keys[pygame.K_DOWN]:
             figure.move_down(desk)
-        if keys[pygame.K_RIGHT]:
-            figure.move_right(desk)
-        if keys[pygame.K_LEFT]:
-            figure.move_left(desk)
 
         game_screen.fill(background_color)
-
-        next_surf = font.render(f"NEXT:", True, background_color)
 
         pygame.draw.rect(game_screen, second_color, stats_rect)
         pygame.draw.rect(game_screen, background_color, next_cubes_surf)
@@ -68,13 +65,8 @@ def main(background_color: str, second_color: str, cube_colors: list,
         pygame.draw.rect(game_screen, second_color, next_cubes_surf, 2)
         pygame.draw.rect(game_screen, second_color, next_cubes_surf, 4, 5)
 
-        if screen_width < 400:
-            score_surf = font.render(f"{score}", True, background_color)
-            game_screen.blit(score_surf, score_surf.get_rect(topleft=(size // 2, size * 2)))
-        else:
-            score_surf = font.render(f"SCORE: {score}", True, background_color)
-            game_screen.blit(score_surf, score_surf.get_rect(topright=(screen_width - size // 2, size // 2)))
-        game_screen.blit(next_surf, next_surf.get_rect(topleft=(size // 2, size // 2)))
+        score_surf = font.render(score_text.format(score), True, background_color)
+        game_screen.blit(score_surf, score_rect)
 
         figure.draw(game_screen)
         desk.draw(game_screen)
@@ -88,6 +80,4 @@ def main(background_color: str, second_color: str, cube_colors: list,
 
 
 if __name__ == '__main__':
-    kwargs = json.load(open('config.json'))
-
-    main(**kwargs)
+    main()
