@@ -4,7 +4,9 @@ import pygame
 import numpy as np
 
 from desk import Desk
-from config import size, borders_color, background_color, cube_colors, generate_figure
+from config import (size, generate_figure,
+                    borders_color, background_color, cube_colors,
+                    gap, borders)
 
 
 class Cube(pygame.sprite.Sprite):
@@ -15,8 +17,8 @@ class Cube(pygame.sprite.Sprite):
 
     def draw(self, screen: pygame.display):
         pygame.draw.rect(screen, self.color, (self.x, self.y, size, size))
-        pygame.draw.rect(screen, borders_color, self.rect, size // 10)
-        pygame.draw.rect(screen, background_color, self.rect, 1)
+        pygame.draw.rect(screen, borders_color, self.rect, borders)
+        pygame.draw.rect(screen, background_color, self.rect, gap)
 
     @property
     def rect(self):

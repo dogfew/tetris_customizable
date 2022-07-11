@@ -47,14 +47,14 @@ def main():
                         figure.move_left(desk)
                     case pygame.K_d | pygame.K_RIGHT:
                         figure.move_right(desk)
-                    case pygame.K_s:
+                    case pygame.K_s | pygame.K_DOWN:
                         figure.move_down(desk)
                     case pygame.K_q | pygame.K_w | pygame.K_UP:
                         figure.rot_left(desk)
                     case pygame.K_e:
                         figure.rot_right(desk)
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] or keys[pygame.K_DOWN]:
+        if keys[pygame.K_SPACE]:
             figure.move_down(desk)
 
         game_screen.fill(background_color)

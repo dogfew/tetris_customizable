@@ -15,6 +15,9 @@ width: int = 10
 height: int = 12
 size: int = 50
 
+borders: int = size // 10
+gap: int = 1
+
 margin = size * 5
 screen_width = size * max(width, 5)
 screen_height = size * max(height, 5) + margin
