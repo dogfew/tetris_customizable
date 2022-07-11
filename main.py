@@ -2,7 +2,7 @@ import sys
 
 import pygame
 
-from desk import Desk
+from board import Board
 from cube import Figure, NextCubes
 from config import (background_color, second_color,
                     start_speed, max_speed, speed_step,
@@ -16,9 +16,9 @@ def main():
     stats_rect = pygame.rect.Rect((0, 0), (screen_width, margin))
     score = 0
 
-    desk = Desk()
-    figure = Figure(NextCubes(desk))
-    cubes = NextCubes(desk)
+    board = Board()
+    figure = Figure(NextCubes(board))
+    cubes = NextCubes(board)
     cubes_down_event = pygame.USEREVENT + 1
     pygame.time.set_timer(cubes_down_event, start_speed)
 
@@ -39,23 +39,23 @@ def main():
                 pygame.quit()
                 sys.exit()
             if event.type == cubes_down_event:
-                figure.update(desk, cubes)
+                figure.update(board, cubes)
                 change_timer(score)
             if event.type == pygame.KEYDOWN:
                 match event.key:
                     case pygame.K_a | pygame.K_LEFT:
-                        figure.move_left(desk)
+                        figure.move_left(board)
                     case pygame.K_d | pygame.K_RIGHT:
-                        figure.move_right(desk)
+                        figure.move_right(board)
                     case pygame.K_s | pygame.K_DOWN:
-                        figure.move_down(desk)
+                        figure.move_down(board)
                     case pygame.K_q | pygame.K_w | pygame.K_UP:
-                        figure.rot_left(desk)
+                        figure.rot_left(board)
                     case pygame.K_e:
-                        figure.rot_right(desk)
+                        figure.rot_right(board)
         keys = pygame.key.get_pressed()
         if keys[pygame.K_SPACE]:
-            figure.move_down(desk)
+            figure.move_down(board)
 
         game_screen.fill(background_color)
 
@@ -69,11 +69,11 @@ def main():
         game_screen.blit(score_surf, score_rect)
 
         figure.draw(game_screen)
-        desk.draw(game_screen)
+        board.draw(game_screen)
         cubes.draw(game_screen)
 
-        score = desk.check(score)
-        desk.update()
+        score = board.check(score)
+        board.update()
 
         pygame.display.update()
         clock.tick(60)

@@ -1,5 +1,7 @@
 from random import choice
 
+"""Можно редактировать"""
+
 background_color: str = "white"
 borders_color: str = "#3c3c3c"
 second_color: str = "#666666"
@@ -18,12 +20,15 @@ size: int = 50
 borders: int = size // 10
 gap: int = 1
 
+"""Не стоит редактировать"""
+
 margin = size * 5
 screen_width = size * max(width, 5)
 screen_height = size * max(height, 5) + margin
 
 
 def generate_figure() -> set:
+    """Figure generation for tetris"""
     coords = {(0, 0)}
     while len(coords) < 4:
         base = choice(list(coords))
